@@ -16,14 +16,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;0,800;1,800&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0e1a33; --panel:rgba(255,255,255,.92); --ink:#14182a; --muted:#4b5470; --accent:#ff5a36; --accent-ink:#ffffff; --line:rgba(20,24,42,.14); --sel:#14182a; --sel-ink:#ffffff;
+  --bg:#070d1c; --panel:rgba(12,18,40,.9); --ink:#f1f4fc; --muted:#a9b3cf; --accent:#ff6a3d; --accent-ink:#ffffff; --line:rgba(241,244,252,.15); --sel:#ffd23f; --sel-ink:#14182a; --gold:#ffd23f; color-scheme:dark;
   box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){ --bg:#070d1c; --panel:rgba(18,24,44,.92); --ink:#eef2fb; --muted:#a5afc8; --accent:#ff6a45; --accent-ink:#ffffff; --line:rgba(238,242,251,.16); --sel:#eef2fb; --sel-ink:#14182a; color-scheme:dark; }
+  :root:not([data-theme="light"]){ --bg:#070d1c; --panel:rgba(18,24,44,.92); --ink:#eef2fb; --muted:#a5afc8; --accent:#ff6a45; --accent-ink:#ffffff; --line:rgba(238,242,251,.16); --sel:#ffd23f; --sel-ink:#14182a; color-scheme:dark; }
 }
-:root[data-theme="dark"]{ --bg:#070d1c; --panel:rgba(18,24,44,.92); --ink:#eef2fb; --muted:#a5afc8; --accent:#ff6a45; --accent-ink:#ffffff; --line:rgba(238,242,251,.16); --sel:#eef2fb; --sel-ink:#14182a; color-scheme:dark; }
+:root[data-theme="dark"]{ --bg:#070d1c; --panel:rgba(18,24,44,.92); --ink:#eef2fb; --muted:#a5afc8; --accent:#ff6a45; --accent-ink:#ffffff; --line:rgba(238,242,251,.16); --sel:#ffd23f; --sel-ink:#14182a; color-scheme:dark; }
 *,*::before,*::after{ box-sizing:inherit; }
 html{ height:100%; scroll-padding-top:env(safe-area-inset-top,0px); }
 body{ margin:0; height:100%; background:var(--bg); color:var(--ink); font-family:"Barlow", system-ui, sans-serif; overflow:hidden; -webkit-user-select:none; user-select:none; }
@@ -275,6 +275,60 @@ html, body{ overscroll-behavior:none; -webkit-text-size-adjust:100%; }
   .credits{ height:58px; margin:6px auto 2px; } .roll p{ font-size:14px; margin-bottom:8px; } .roll .fin{ font-size:22px; }
   .homecard h1{ font-size:44px; } .homecard > p{ margin:2px 0 10px; font-size:14px; } .homebtns{ grid-template-columns:1.3fr 1fr; gap:10px; } .hb{ padding:12px 14px; } .hb b{ font-size:24px; } .hb span{ font-size:12px; } .gfx{ margin-top:10px; font-size:13px; }
 }
+
+/* ======= menus de jogo ======= */
+.panel{ background:linear-gradient(180deg,rgba(22,30,62,.94),rgba(10,14,32,.94)); border:1px solid rgba(255,210,63,.22); box-shadow:0 30px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.08); }
+.mhead h1, .match .mtop b{ background:linear-gradient(180deg,#fff3a8,#ffd23f 45%,#ff8a2a); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 3px 10px rgba(255,140,40,.35)); }
+.btn{ background:linear-gradient(180deg,#ff8a4d,#ff5a2a); box-shadow:0 8px 22px rgba(255,90,42,.45), inset 0 1px 0 rgba(255,255,255,.35); }
+.btn.ghost{ background:rgba(255,255,255,.06); box-shadow:none; color:var(--ink); border:1px solid var(--line); }
+.homecard h1{ background:linear-gradient(180deg,#fff7c2,#ffd23f 45%,#ff7a1a); -webkit-background-clip:text; background-clip:text; color:transparent; filter:drop-shadow(0 6px 24px rgba(255,120,30,.55)); }
+.devb{ margin-top:12px; font:inherit; font-size:12px; color:rgba(255,255,255,.55); background:transparent; border:1px dashed rgba(255,255,255,.25); border-radius:999px; padding:4px 12px; cursor:pointer; }
+.devb.on{ color:#14182a; background:#38e05a; border-style:solid; }
+.tc.locked{ filter:grayscale(1) brightness(.55); cursor:not-allowed; } .tc .lock{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:30px; z-index:2; }
+.node.locked{ opacity:.45; cursor:not-allowed; }
+.stage{ background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02)); }
+.stage:nth-child(1) h3{ color:#d79a5c; } .stage:nth-child(2) h3{ color:#cfd6e2; } .stage:nth-child(3) h3{ color:#ffd23f; } .stage:nth-child(4) h3{ color:#ff8a4d; }
+#vs{ display:block; }
+/* confronto */
+.match{ display:flex; flex-direction:column; height:100%; }
+.mtop{ text-align:center; } .mtop span{ display:block; font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); }
+.mtop b{ display:block; font-family:"Barlow Condensed",sans-serif; font-style:italic; font-weight:800; font-size:clamp(30px,5vw,54px); line-height:1; text-transform:uppercase; }
+.mtop em{ font-style:normal; font-size:13px; color:var(--gold); }
+.mvs{ flex:1; min-height:0; display:grid; grid-template-columns:1fr auto 1fr; align-items:end; gap:10px; margin:6px 0; }
+.team{ display:flex; flex-direction:column; align-items:center; min-height:0; animation:inL .6s cubic-bezier(.2,.9,.3,1.2) both; }
+.team.r{ animation-name:inR; }
+.team img{ height:min(42vh,360px); width:auto; max-width:100%; filter:drop-shadow(0 10px 18px rgba(0,0,0,.45)); }
+.tname{ display:flex; align-items:center; gap:8px; font-family:"Barlow Condensed",sans-serif; font-style:italic; font-weight:800; font-size:24px; text-transform:uppercase; background:rgba(255,255,255,.08); border:1px solid var(--line); border-radius:999px; padding:3px 14px; margin-top:-6px; }
+.tname small{ font-style:normal; font-size:14px; color:#14182a; background:var(--gold); border-radius:999px; padding:0 8px; }
+.team .pn{ font-size:13px; color:var(--muted); margin-top:3px; }
+.vsx{ align-self:center; font-family:"Barlow Condensed",sans-serif; font-style:italic; font-weight:800; font-size:clamp(44px,7vw,84px); color:#fff; text-shadow:0 0 24px rgba(255,120,40,.9), 0 4px 0 #ff5a2a; animation:pop .5s .35s cubic-bezier(.2,1.6,.4,1) both; }
+@keyframes inL{ from{ transform:translateX(-60px); opacity:0; } } @keyframes inR{ from{ transform:translateX(60px); opacity:0; } } @keyframes pop{ from{ transform:scale(0) rotate(-20deg); opacity:0; } }
+.match .scout{ text-align:center; } .match .actions{ justify-content:center; }
+/* pausa */
+.pzb{ position:absolute; top:calc(10px + env(safe-area-inset-top,0px)); right:calc(58px + env(safe-area-inset-right,0px)); z-index:3; width:40px; height:40px; border-radius:10px; border:0; background:rgba(10,14,28,.6); color:#fff; font-size:15px; cursor:pointer; }
+body:not(.touch) .pzb{ right:calc(10px + env(safe-area-inset-right,0px)); }
+.pausebox{ display:flex; flex-direction:column; gap:10px; min-width:240px; padding:22px; border-radius:18px; background:linear-gradient(180deg,rgba(22,30,62,.96),rgba(10,14,32,.96)); border:1px solid rgba(255,210,63,.25); text-align:center; }
+.pausebox h2{ margin:0 0 4px; font-family:"Barlow Condensed",sans-serif; font-style:italic; font-size:40px; color:var(--gold); }
+/* encerramento: pôr do sol, ondas e os campeões surfando */
+#ending{ padding:0 !important; background:#1b1240; }
+#surfCv{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+.endbox{ position:relative; z-index:1; }
+.congr span{ animation:hop 1.2s ease-in-out infinite, hue 2.4s linear infinite; background:linear-gradient(180deg,#fff,#ffe14a 40%,#ff5a2a); -webkit-background-clip:text; background-clip:text; }
+@keyframes hue{ to{ filter:hue-rotate(360deg) drop-shadow(0 4px 14px rgba(255,170,0,.55)); } }
+.endstats{ grid-template-columns:repeat(6,1fr) !important; } .endstats div{ background:rgba(0,0,0,.35); text-align:center; }
+.theend{ font-family:"Barlow Condensed",sans-serif; font-style:italic; font-weight:800; font-size:44px; color:#fff; text-shadow:0 0 18px #ff5a2a; }
+@media (max-height: 520px) and (orientation: landscape){
+  .mtop span{ font-size:10px; } .mtop b{ font-size:28px; } .mtop em{ font-size:11px; }
+  .team img{ height:44vh; } .tname{ font-size:16px; padding:2px 10px; } .tname small{ font-size:11px; } .team .pn{ font-size:11px; } .vsx{ font-size:40px; }
+  .pausebox{ padding:14px; } .pausebox h2{ font-size:30px; }
+  .endstats div{ padding:3px 4px !important; } .endstats b{ font-size:18px !important; } .theend{ font-size:28px; }
+}
+
+#ending .endbox{ max-width:none; height:100%; display:flex; flex-direction:column; align-items:center; padding:12px 16px 0; margin:0; }
+#ending .credits{ position:absolute; right:calc(18px + env(safe-area-inset-right,0px)); bottom:76px; width:min(300px,34vw); height:min(170px,30vh); margin:0; text-align:right; background:rgba(10,8,30,.35); border-radius:14px; padding:6px 12px; }
+#ending .actions{ position:absolute; right:calc(18px + env(safe-area-inset-right,0px)); bottom:calc(16px + env(safe-area-inset-bottom,0px)); margin:0; }
+#ending .endstats{ max-width:760px; width:100%; }
+@media (max-height: 520px) and (orientation: landscape){ #ending .endbox{ padding-top:6px; } #ending .credits{ bottom:58px; height:110px; } .endstats span{ font-size:10px !important; } }
 </style>
 <script src="three.min.js"></script>
 </head>
@@ -289,6 +343,8 @@ html, body{ overscroll-behavior:none; -webkit-text-size-adjust:100%; }
     <div id="tapHint" hidden></div>
   </div>
   <button id="fsBtn" class="fsb" hidden aria-label="Tela cheia">⛶</button>
+  <button id="pauseBtn" class="pzb" hidden aria-label="Pausa e menu">❚❚</button>
+  <div id="pause" class="overlay" hidden><div class="pausebox"><h2>Pausa</h2><button class="btn" id="pzGo">Continuar</button><button class="btn ghost" id="pzAgain">Recomeçar partida</button><button class="btn ghost" id="pzExit">Sair da partida</button></div></div>
   <div id="ending" class="overlay" hidden></div>
   <div id="cer" hidden><h2 id="cerTitle">CAMPEÕES</h2><button class="btn" id="cerGo">Continuar</button></div>
   <div id="rotate"><div><b>Gire o celular</b><span>O Rei da Praia é jogado com o celular deitado.</span></div></div>
@@ -299,9 +355,9 @@ html, body{ overscroll-behavior:none; -webkit-text-size-adjust:100%; }
       <p>Vôlei de praia 3D</p>
       <div class="homebtns">
         <button class="hb main" id="goCareer"><b>Carreira</b><span>Do torneio amador da praia até a Grande Final</span></button>
-        <button class="hb" id="goQuick"><b>Partida avulsa</b><span>Escolha duas seleções e jogue</span></button>
+        <button class="hb" id="goQuick"><b>Amistoso</b><span>Jogue com as seleções que você já venceu</span></button>
       </div>
-      <div class="gfx"><span>Gráficos</span><div class="seg" id="segGfx"><button data-v="auto" aria-pressed="true">Auto</button><button data-v="alta" aria-pressed="false">Alta</button><button data-v="media" aria-pressed="false">Média</button><button data-v="leve" aria-pressed="false">Leve</button></div></div>
+      <button id="devBtn" class="devb">Modo desenvolvedor</button><div class="gfx"><span>Gráficos</span><div class="seg" id="segGfx"><button data-v="auto" aria-pressed="true">Auto</button><button data-v="alta" aria-pressed="false">Alta</button><button data-v="media" aria-pressed="false">Média</button><button data-v="leve" aria-pressed="false">Leve</button></div></div>
     </div>
   </div>
   <div id="career" class="overlay" hidden><div class="panel" id="careerPanel" role="dialog" aria-label="Carreira"></div></div>
@@ -562,7 +618,8 @@ function teamAI(t){
   const avg = k => (att(t.players[0], k) + att(t.players[1], k)) / 2, all = (avg('pas') + avg('lev') + avg('ata') + avg('blo') + avg('saq') + avg('vel')) / 6;
   return { perfect: 0.12 + 0.8 * all, miss: 0.03 + 0.22 * (1 - all), block: 0.2 + 0.65 * avg('blo'), speed: 0.86 + 0.16 * avg('vel'), serveC: 0.05 + 0.5 * avg('saq') };
 }
-function skillOf(p, key){ const a = att(p, key); return { perfect: 0.1 + 0.82 * a, miss: 0.03 + 0.25 * (1 - a) }; }
+let AI_F = 1;                                             // fator da etapa: no começo da carreira a CPU erra mais
+function skillOf(p, key){ const a = att(p, key), f = p && p.team && (p.team.isHuman || p.team.id === 0) ? 1 : AI_F; return { perfect: (0.1 + 0.82 * a) * f, miss: 0.03 + 0.25 * (1 - a) + (1 - f) * 0.3 }; }
 
 /* -------------------------------- career/Data ---------------------------------- */
 // Duplas do torneio amador (sem bandeira: é o campeonato da praia)
@@ -581,9 +638,9 @@ AMATEURS.forEach(t => { t.p.forEach(p => (p.shorts = t.uni)); t.rating = Math.ro
 const REIS = Object.assign({}, ROSTER[0], { name: 'Reis da Praia' });
 // circuito: 3 torneios de 3 jogos + a grande final (melhor de 3). As ajudas diminuem conforme avança.
 const STAGES = [
-  { env: 'amador', name: 'Torneio Amador da Praia', short: 'Amador', games: ['Quartas', 'Semifinal', 'Final'], opp: () => AMATEURS, targets: [15], setsToWin: 1, bar: true, barLevel: 3, aim: true, lockR: 1.5, aids: 'barra de timing completa · mira na areia · trava ampla' },
-  { env: 'regional', name: 'Circuito Regional', short: 'Regional', games: ['Quartas', 'Semifinal', 'Final'], opp: () => [ROSTER[7], ROSTER[6], ROSTER[5]], targets: [15], setsToWin: 1, bar: true, barLevel: 2, aim: true, lockR: 1.15, aids: 'barra curta · mira na areia' },
-  { env: 'pro', name: 'Circuito Profissional', short: 'Profissional', games: ['Quartas', 'Semifinal', 'Final'], opp: () => [ROSTER[4], ROSTER[2], ROSTER[1]], targets: [21], setsToWin: 1, bar: true, barLevel: 1, aim: false, lockR: 1.15, brazil: true, aids: 'só um piscar no tempo certo' },
+  { env: 'amador', name: 'Torneio Amador da Praia', short: 'Amador', games: ['Quartas', 'Semifinal', 'Final'], opp: () => AMATEURS, targets: [7], setsToWin: 1, aiFactor: 0.55, bar: true, barLevel: 3, aim: true, lockR: 1.5, aids: 'barra de timing completa · mira na areia · trava ampla' },
+  { env: 'regional', name: 'Circuito Regional', short: 'Regional', games: ['Quartas', 'Semifinal', 'Final'], opp: () => [ROSTER[7], ROSTER[6], ROSTER[5]], targets: [10], setsToWin: 1, aiFactor: 0.75, bar: true, barLevel: 2, aim: true, lockR: 1.15, aids: 'barra curta · mira na areia' },
+  { env: 'pro', name: 'Circuito Profissional', short: 'Profissional', games: ['Quartas', 'Semifinal', 'Final'], opp: () => [ROSTER[4], ROSTER[2], ROSTER[1]], targets: [21], setsToWin: 1, aiFactor: 0.85, bar: true, barLevel: 1, aim: false, lockR: 1.15, brazil: true, aids: 'só um piscar no tempo certo' },
   { env: 'final', name: 'Grande Final', short: 'Final', games: ['Final'], opp: () => [REIS], targets: [21, 21, 15], setsToWin: 2, bar: false, aim: false, lockR: 0.85, brazil: true, aids: 'sem barra · trava menor · melhor de 3 sets' },
 ];
 const STAGE_R = [58, 67, 77, 86];                       // nível de referência da sua dupla em cada etapa (modo teste)
@@ -614,10 +671,11 @@ const presetAttrs = s => [mkAttr(STAGE_R[s], 'def'), mkAttr(STAGE_R[s], 'atk')];
 // evolução simples: 3 escolhas por etapa (automática, ataque, defesa)
 const EVO = {
   auto: [{ pas: 11, lev: 11, vel: 10, ata: 8, blo: 7, saq: 9 }, { pas: 8, lev: 7, vel: 8, ata: 11, blo: 11, saq: 10 }],
-  ataque: [{ ata: 13, saq: 12, blo: 11, pas: 7, lev: 7, vel: 7 }, { ata: 14, saq: 12, blo: 12, pas: 6, lev: 6, vel: 7 }],
-  defesa: [{ pas: 14, lev: 13, vel: 12, ata: 6, blo: 5, saq: 7 }, { pas: 13, lev: 12, vel: 12, ata: 7, blo: 6, saq: 7 }],
+  equilibrada: [{ pas: 9, lev: 9, vel: 9, ata: 9, blo: 9, saq: 9 }, { pas: 9, lev: 9, vel: 9, ata: 9, blo: 9, saq: 9 }],
+  ataque: [{ ata: 12, saq: 11, blo: 11, pas: 8, lev: 8, vel: 8 }, { ata: 12, saq: 11, blo: 11, pas: 8, lev: 8, vel: 8 }],
+  defesa: [{ pas: 12, lev: 12, vel: 11, ata: 8, blo: 7, saq: 8 }, { pas: 12, lev: 12, vel: 11, ata: 8, blo: 7, saq: 8 }],
 };
-const EVO_NAMES = { auto: 'Automática', ataque: 'Foco no ataque', defesa: 'Foco na defesa' };
+const EVO_NAMES = { auto: 'Automática', equilibrada: 'Equilibrada', ataque: 'Foco no ataque', defesa: 'Foco na defesa' };
 function evolve(attrs, focus){ return attrs.map((a, i) => { const o = {}; for (const k in a) o[k] = Math.min(99, a[k] + EVO[focus][i][k]); return o; }); }
 function evolvedAttrs(s, focus){ let a = presetAttrs(0); for (let i = 0; i < s; i++) a = evolve(a, focus || 'auto'); return a; }
 const Career = {
@@ -705,6 +763,32 @@ function cardURL(t){
     <g transform="translate(${-6 - 100 * (big(a) - 1)} ${55 - 250 * (big(a) - 1)}) scale(${big(a)})">${bustSVG(a, t.uni)}</g>
     <g transform="translate(${406 + 100 * (big(b) - 1)} ${55 - 250 * (big(b) - 1)}) scale(${-big(b)} ${big(b)})">${bustSVG(b, t.uni)}</g>
     <rect y="270" width="400" height="30" fill="#000" opacity=".22"/></svg>`;
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
+// corpo inteiro ilustrado (usa o busto e acrescenta bermuda, pernas e pés)
+function bodySVG(a, uni){
+  const m = a.mass || 1, sk = a.skin, skD = shHex(sk, 0.8), skDD = shHex(sk, 0.62), skL = shHex(sk, 1.12), id = 'L' + (BUST_ID++), W = 46 * m;
+  const leg = (s) => {
+    const x = 100 + s * 22 * m;
+    return `<path d="M${x - 19 * m} 300 Q${x - 21 * m} 336 ${x - 14 * m} 372 Q${x - 19 * m} 398 ${x - 10 * m} 440 L${x + 9 * m} 440 Q${x + 17 * m} 398 ${x + 13 * m} 372 Q${x + 20 * m} 334 ${x + 18 * m} 300 Z" fill="url(#${id}l)" stroke="${skDD}" stroke-opacity=".35"/>
+      <ellipse cx="${x - 1}" cy="371" rx="${8 * m}" ry="6" fill="${skD}" opacity=".35"/>
+      <path d="M${x - 12 * m} 438 Q${x + s * 2} 452 ${x + s * 22 + 4} 448 L${x + s * 22 + 4} 442 Q${x} 436 ${x - 8 * m} 434 Z" fill="${skD}"/>
+      <path d="M${x - 10 * m} 430 L${x + 8 * m} 430" stroke="#e8cf9d" stroke-width="5" opacity=".55"/>`;
+  };
+  return `<defs><linearGradient id="${id}l" x1="0" x2="1"><stop offset="0" stop-color="${skL}"/><stop offset=".55" stop-color="${sk}"/><stop offset="1" stop-color="${skD}"/></linearGradient>
+    <linearGradient id="${id}s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${uni.base}"/><stop offset="1" stop-color="${uni.grad || shHex(uni.base, 0.8)}"/></linearGradient></defs>` +
+    leg(-1) + leg(1) +
+    `<path d="M${100 - W - 6} 236 L${100 + W + 6} 236 L${100 + W + 10} 312 Q${100 + 26} 318 ${100 + 4} 308 L100 292 L${100 - 4} 308 Q${100 - 26} 318 ${100 - W - 10} 312 Z" fill="url(#${id}s)"/>` +
+    `<path d="M${100 - W - 9} 304 L${100 - 6} 302 M${100 + 6} 302 L${100 + W + 9} 304" stroke="${uni.trim}" stroke-width="5"/>` +
+    bustSVG(a, uni).replace(/<rect x="[^"]*" y="234"[^>]*\/><rect x="[^"]*" y="234"[^>]*\/>/, '');
+}
+function duoFullURL(t, glow){
+  const [a, b] = t.p, h = p => (p.h || 1);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 470">
+    <ellipse cx="200" cy="452" rx="170" ry="14" fill="#000" opacity=".22"/>
+    <g transform="translate(${-8} ${470 - 452 * h(a)}) scale(${h(a)})">${bodySVG(a, t.uni)}</g>
+    <g transform="translate(${408} ${470 - 452 * h(b)}) scale(${-h(b)} ${h(b)})">${bodySVG(b, t.uni)}</g></svg>`;
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 }
 
@@ -1074,6 +1158,39 @@ const Sound = {
   },
 };
 
+
+const SurfMusic = {
+  timer: null, step: 0, next: 0,
+  start(){
+    const c = Sound.ctx; if (!c || !Sound.on || this.timer) return;
+    this.out = c.createGain(); this.out.gain.value = 0.55; this.out.connect(c.destination);
+    const d = c.createDelay(); d.delayTime.value = 0.11; const fb = c.createGain(); fb.gain.value = 0.38; const wet = c.createGain(); wet.gain.value = 0.45;
+    d.connect(fb); fb.connect(d); d.connect(wet); wet.connect(this.out); this.verb = d;
+    this.step = 0; this.next = c.currentTime + 0.1;
+    this.timer = setInterval(() => this.tick(), 25);
+  },
+  stop(){ if (this.timer){ clearInterval(this.timer); this.timer = null; } if (this.out){ try { this.out.gain.setTargetAtTime(0, Sound.ctx.currentTime, 0.2); } catch (e){} } },
+  tick(){
+    const c = Sound.ctx, s16 = 60 / 168 / 4;
+    while (this.next < c.currentTime + 0.12){ this.play(this.step, this.next, s16); this.step = (this.step + 1) % 64; this.next += s16; }
+  },
+  play(i, t, s16){
+    const c = Sound.ctx, hz = n => 440 * Math.pow(2, (n - 69) / 12);
+    const env = (node, a, peak, rel, dst) => { const g = c.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(peak, t + a); g.gain.exponentialRampToValueAtTime(0.0001, t + a + rel); node.connect(g); g.connect(dst || this.out); return g; };
+    const noise = dur => { const b = c.createBuffer(1, c.sampleRate * dur | 0, c.sampleRate), d = b.getChannelData(0); for (let k = 0; k < d.length; k++) d[k] = Math.random() * 2 - 1; const s = c.createBufferSource(); s.buffer = b; return s; };
+    const beat = i % 16;
+    if (beat === 0 || beat === 8 || beat === 10){ const o = c.createOscillator(); o.frequency.setValueAtTime(130, t); o.frequency.exponentialRampToValueAtTime(45, t + 0.12); env(o, 0.002, 0.7, 0.14); o.start(t); o.stop(t + 0.2); }
+    if (beat === 4 || beat === 12){ const n = noise(0.15), f = c.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 1800; n.connect(f); env(f, 0.002, 0.45, 0.12); n.start(t); }
+    if (i % 2 === 0){ const n = noise(0.05), f = c.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = 7000; n.connect(f); env(f, 0.001, 0.12, 0.03); n.start(t); }
+    const bar = (i / 16) | 0, roots = [40, 40, 45, 47];                     // E, E, A, B (baixo)
+    if (i % 4 === 0){ const o = c.createOscillator(); o.type = 'square'; o.frequency.value = hz(roots[bar] + (beat === 12 ? 7 : 0)); const f = c.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 600; o.connect(f); env(f, 0.005, 0.22, s16 * 3.5); o.start(t); o.stop(t + s16 * 4); }
+    const mel = [[64, 65, 68, 69], [71, 69, 68, 65], [64, 68, 71, 72], [71, 69, 68, 64]][bar][(beat / 4) | 0];   // frase original em E frígio dominante
+    const o = c.createOscillator(); o.type = 'sawtooth'; o.frequency.value = hz(mel + 12 * (bar === 2 && beat >= 12 ? 1 : 0));
+    const f = c.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 2600; o.connect(f);
+    const g = env(f, 0.003, 0.16, s16 * 0.8); g.connect(this.verb); o.start(t); o.stop(t + s16);   // trêmolo: nota repetida a cada 16 avos
+  },
+};
+
 /* --------------------------------- fx/Particles ---------------------------- */
 class Particles {
   constructor(){ this.list = []; this.bursts = []; }
@@ -1257,7 +1374,7 @@ class TeamAI {
     const g = this.g, b = g.ball, d = this.team.ai;
     let pl = this.plans.get(p);
     if (!pl || pl.traj !== b.trajId){
-      pl = { traj: b.trajId, reactAt: g.time + rand(0.05, 0.16) * (1.5 - d.speed) + (b.fire ? 0.12 : 0), btn: this.chooseBtn(myT, b), pressAt: null, pressed: false };
+      pl = { traj: b.trajId, reactAt: g.time + rand(0.05, 0.16) * (1.5 - d.speed) + (b.fire ? 0.12 : 0) + (b.speed() > 14 && this.team.id === 1 ? (1 - AI_F) * 0.35 : 0), btn: this.chooseBtn(myT, b), pressAt: null, pressed: false };
       this.plans.set(p, pl);
     }
     const ht = CFG.CONTACT[pl.btn === 'A' ? 'bump' : pl.btn === 'B' ? 'set' : 'spike'];
@@ -1276,7 +1393,8 @@ class TeamAI {
         let tc = b.timeToHeight(CFG.CONTACT[type]);
         if (tc === null){ pl.btn = 'A'; tc = b.timeToHeight(CFG.CONTACT.bump); }
         if (tc === null){ pl.pressAt = Infinity; return; }
-        pl.pressAt = g.time + tc + TimingSystem.sampleDelta(CFG.WIN[type], skillOf(p, TYPE_ATTR[type]));
+        const sk2 = skillOf(p, TYPE_ATTR[type]), hard = clamp((b.speed() - 13) / 10, 0, 0.75);   // bola forte: a CPU acerta menos o tempo
+        pl.pressAt = g.time + tc + TimingSystem.sampleDelta(CFG.WIN[type], { perfect: sk2.perfect * (1 - hard), miss: sk2.miss + hard * 0.35 });
       }
     }
     if (!pl.pressed && pl.pressAt !== null && g.time >= pl.pressAt){ pl.pressed = true; g.press(p, pl.btn); }
@@ -1453,7 +1571,9 @@ class Game {
   get allPlayers(){ return this.teams[0].players.concat(this.teams[1].players); }
   start(aIdx, bIdx, pts, demo){ this.startCustom(ROSTER[aIdx], ROSTER[bIdx], { targets: [pts], setsToWin: 1, demo, bar: this.barMode !== 'off', aim: true, lockR: 1.15 }); }
   startCustom(rA, rB, cfg){
+    this.lastStart = [rA, rB, cfg];
     const demo = !!cfg.demo, pts = cfg.targets[0];
+    this.aiFactor = cfg.aiFactor || 1; AI_F = this.aiFactor;
     this.barMode = cfg.bar ? 'on' : 'off'; this.barLevel = cfg.barLevel != null ? cfg.barLevel : (cfg.bar ? 3 : 0); this.aimOn = cfg.aim !== false; CFG.LOCK_R = cfg.lockR || 1.15; this.env = cfg.env || 'pro'; this.ceremony = null;
     for (const t of this.teams) for (const p of t.players) p.standZ = null;
     setRoster(this.teams[0], rA); setRoster(this.teams[1], rB);
@@ -1600,7 +1720,9 @@ class Game {
     const kb = clamp(1.2 - b.speed() / 32, 0.6, 1.1), w0 = CFG.WIN[type], ak = att(pl, TYPE_ATTR[type]);
     const win = { p: w0.p * kb * (0.75 + 0.5 * ak), g: w0.g * kb * (0.85 + 0.3 * ak) };   // bola rápida = janela menor; jogador bom = janela maior
     const delta = -tc;
-    if (delta < -(win.g + CFG.EARLY_IGNORE)){ if (team.isHuman) this.addFx(pl, 'cedo demais', '#cfd8e8'); return; }
+    if (delta < -(win.g + CFG.EARLY_IGNORE)){
+      if (!(team.isHuman && this.aiFactor < 0.8)){ if (team.isHuman) this.addFx(pl, 'cedo demais', '#cfd8e8'); return; }
+    }
     pl.pending = { type, btn, delta, grade: TimingSystem.classify(delta, win), at: this.time + Math.max(0, tc), traj: b.trajId };
   }
 
@@ -1705,7 +1827,7 @@ class Game {
     } else { const c = this.aiShot(pl, oppTeam); shot = c.shot; lat = c.lat; }
     const from = { x: b.p.x, y: b.p.y }, fire = pl.team.fire >= 1 && q === 2 && shot !== 'dink' && shot !== 'shot';
     let tg, T, label, col = q === 2 ? GRADE_COL.PERFECT : q === 1 ? '#ffb347' : '#ff8a6a';
-    const aa = att(pl, 'ata'), power = (dist, f) => Math.max(fire ? 0.28 : 0.34, dist / ((fire ? 27 : q === 2 ? 20 : q === 1 ? 14 : 10) * (0.78 + 0.35 * aa))) * f;
+    const aa = att(pl, 'ata') * (pl.team.id === 0 ? 1 : 0.7 + 0.3 * AI_F), power = (dist, f) => Math.max(fire ? 0.28 : 0.34, dist / ((fire ? 27 : q === 2 ? 20 : q === 1 ? 14 : 10) * (0.78 + 0.35 * aa))) * f;
     if (shot === 'dink'){
       tg = at ? { x: at.x + opp * rand(-0.25, 0.25), y: clamp(at.y + rand(-0.3, 0.3), 0.7, 7.3), z: 0 } : { x: opp * rand(1.1, 2.0), y: clamp(b.p.y + lat * 2.4 + rand(-0.4, 0.4), 0.7, 7.3), z: 0 };
       T = bm.solveT(tg, 0.85, 0.18); label = at ? at.label : 'LARGADINHA'; col = '#fff6e0';
@@ -2012,6 +2134,7 @@ class Game {
       const hx = (pl.sk.r.ha.x + pl.sk.l.ha.x) / 2, hy = (pl.sk.r.ha.y + pl.sk.l.ha.y) / 2, hz = (pl.sk.r.ha.z + pl.sk.l.ha.z) / 2;
       if (Math.hypot(hx - b.p.x, hy - b.p.y, hz - b.p.z) < 1.0) b.p = { x: hx, y: hy, z: hz + (pd.type === 'set' ? 0.12 : 0.08) };
     }
+    pl.inSpeed = b.speed();
     if (!m.registerTouch(pl)) return;
     pl.lastQ = clamp(1 - Math.abs(pd.delta) / (CFG.WIN[pd.type] ? CFG.WIN[pd.type].g : 0.24), 0, 1);
     this.lastTiming = { delta: pd.delta, grade, type: pd.type, who: team.id };
@@ -2032,6 +2155,12 @@ class Game {
       const ap = att(pl, 'pas'), q = pl.lastQ == null ? 1 : pl.lastQ;            // habilidade de passe e precisão do tempo (meio da barra = 1)
       if (grade === Grade.PERFECT){ const e = (1 - q) * 0.7 * (1.25 - ap); tg = { x: side * clamp(bx + rand(-e, e), 0.7, 3), y: clamp(by + rand(-e, e) * 1.5, 0.5, 7.5), z: CFG.CONTACT.set }; }
       else if (grade === 'SHANK') tg = { x: side * rand(1.5, 7.5), y: rand(-1.5, 9.5), z: 0.3 };   // manchete torta: pode até ir para fora
+      const pw = clamp(((pl.inSpeed || 0) - 13) / 9, 0, 1);       // potência da bola recebida
+      if (pw > 0 && Math.random() < (grade === Grade.PERFECT ? 0.45 : grade === 'SHANK' ? 0.95 : 0.8) * pw){
+        if (Math.random() < 0.5){ tg = { x: side * rand(1, 9), y: Math.random() < 0.5 ? -2.6 : 10.6, z: 0 }; bm.hit(pl, tg, 1.25); this.addFx(pl, 'ESPIRROU!', GRADE_COL.MISS, 2.6); }
+        else { tg = { x: side * rand(2, 6.5), y: rand(1, 7), z: 0 }; bm.hit(pl, tg, 2.7); this.addFx(pl, 'SUBIU DEMAIS!', GRADE_COL.EARLY, 2.6); }
+        return;
+      }
       else if (grade === Grade.EARLY) tg = { x: side * lerp(rand(3.4, 4.6), bx, 0.5 * ap), y: clamp(lerp(by + rand(-1.8, 1.8), by, 0.5 * ap), 0.5, 7.5), z: CFG.CONTACT.set };
       else tg = { x: side * lerp(rand(1.8, 3.6), bx, 0.5 * ap), y: clamp(lerp(by + (Math.random() < 0.5 ? -1 : 1) * rand(2, 3), by, 0.5 * ap), 0, 8), z: CFG.CONTACT.set };
       const T = type === 'set' ? 1.35 : 1.45;
@@ -2095,8 +2224,25 @@ class Game {
     this.ref.update(this, dt); for (const lj of this.lineJudges) lj.update(this, dt);
     if (this.excite > 0) this.excite = Math.max(0, this.excite - dt * 0.6);
     for (const p of this.allPlayers) p.update(dt, this);
+    for (const t of this.teams){                              // afastamento entre parceiros
+      const [a, c] = t.players; if (a.standZ != null || c.standZ != null) continue;
+      const dx = c.x - a.x, dy = c.y - a.y, d = Math.hypot(dx, dy);
+      if (d < 0.7 && d > 1e-4){
+        const cp = this.contactPointFor(t), prio = cp ? (Math.hypot(a.x - cp.x, a.y - cp.y) < Math.hypot(c.x - cp.x, c.y - cp.y) ? a : c) : (a.isControlled ? a : c);
+        const other = prio === a ? c : a, push = (0.7 - d), ux = (other.x - prio.x) / d, uy = (other.y - prio.y) / d;
+        if (!other.airborne && other.dive <= 0){ other.x += ux * push; other.y += uy * push; other.y += (other.y > prio.y ? 1 : -1) * push * 0.3; }
+      }
+    }
     for (const p of this.allPlayers) Animator.update(p, this, dt);
     if (b.state === BallState.Idle && m.server) this.attachBall();
+    // amador e regional: se a bola chega no jogador travado e ninguém apertou, ele encosta mesmo assim (toque torto)
+    if (this.match.state === 'RALLY' && this.aiFactor < 0.8){
+      const h = this.teams[0], a = this.human.active, bb = this.ball;
+      if (h.isHuman && a && a.lock && !a.pending && !a.airborne && bb.state === BallState.InAir && bb.p.x * h.side > 0){
+        const tc = bb.timeToHeight(CFG.CONTACT.bump);
+        if (tc !== null && tc < 0.02 && tc > -0.05) a.pending = { type: 'bump', btn: 'A', delta: 0.3, grade: 'SHANK', at: this.time, traj: bb.trajId, auto: true };
+      }
+    }
     // contato no ar: acontece quando a mão (que segue o relógio da batida) está mais perto da bola
     for (const p of this.allPlayers){
       const ah = p.airHit; if (!ah || this.time < ah.from || !p.sk) continue;
@@ -3553,17 +3699,18 @@ if (typeof window !== 'undefined' && !window.__HEADLESS__){
   const NAMES = { pas: 'Manchete', lev: 'Levantamento', ata: 'Cortada', blo: 'Bloqueio', saq: 'Saque', vel: 'Velocidade' };
   const avg = (t, k) => Math.round((t.p[0].at[k] + t.p[1].at[k]) / 2);
   const photo = i => portraits[i] ? '<img src="' + portraits[i] + '" alt="' + ROSTER[i].p[0].name + ' e ' + ROSTER[i].p[1].name + '">' : '<span class="ld">gerando imagem…</span>';
+  const unlocked = i => { if (localStorage.getItem('reiDaPraia.dev') === '1') return true; let s = null; try { s = JSON.parse(localStorage.getItem('reiDaPraia.carreira.v1') || 'null'); } catch (e){} return !!(s && s.beaten && s.beaten.includes(ROSTER[i].name)); };
   function renderGrid(){
-    grid.innerHTML = ROSTER.map((t, i) => '<button class="tc' + (i === focus ? ' focus' : '') + '" data-i="' + i + '" aria-pressed="' + (i === pick[step === 1 ? 0 : 1]) + '">' +
+    grid.innerHTML = ROSTER.map((t, i) => '<button class="tc' + (i === focus ? ' focus' : '') + (unlocked(i) ? '' : ' locked') + '" data-i="' + i + '" aria-pressed="' + (i === pick[step === 1 ? 0 : 1]) + '">' + (unlocked(i) ? '' : '<span class="lock">🔒</span>') +
       (i === pick[0] ? '<span class="bd p1">VOCÊ</span>' : '') + (step >= 2 && i === pick[1] ? '<span class="bd p2">CPU</span>' : '') +
       '<span class="rt">' + t.rating + '</span><div class="ph">' + photo(i) + '</div><div class="tb">' +
       '<div class="tn"><img src="' + flagURL(t.flag) + '" alt="">' + t.name + '</div><div class="st">' + stars(t.stars) + '</div>' +
       '<div class="pn">' + t.p[0].name + ' · ' + t.p[1].name + '</div>' +
       '<div class="mini" title="Manchete · Levantamento · Cortada · Bloqueio · Saque · Velocidade">' + Object.keys(NAMES).map(k => '<i><b style="width:' + avg(t, k) + '%"></b></i>').join('') + '</div></div></button>').join('');
     grid.querySelectorAll('.tc').forEach(el => el.addEventListener('click', () => {
-      const i = +el.dataset.i; focus = i; pick[step === 1 ? 0 : 1] = i; renderGrid(); renderDetail();
+      const i = +el.dataset.i; if (!unlocked(i)) return; focus = i; pick[step === 1 ? 0 : 1] = i; renderGrid(); renderDetail();
     }));
-    grid.querySelectorAll('.tc').forEach(el => el.addEventListener('dblclick', () => { pick[step === 1 ? 0 : 1] = +el.dataset.i; showStep(step + 1); }));
+    grid.querySelectorAll('.tc').forEach(el => el.addEventListener('dblclick', () => { if (!unlocked(+el.dataset.i)) return; pick[step === 1 ? 0 : 1] = +el.dataset.i; showStep(step + 1); }));
   }
   function renderDetail(){
     const t = ROSTER[focus];
@@ -3571,14 +3718,16 @@ if (typeof window !== 'undefined' && !window.__HEADLESS__){
       Object.keys(NAMES).map(k => '<div class="at"><span>' + NAMES[k] + '</span><s><u style="width:' + p.at[k] + '%"></u></s><b>' + p.at[k] + '</b></div>').join('') + '</div>').join('');
   }
   function renderVS(){
-    const side = i => { const t = ROSTER[i]; return '<div class="side">' + (portraits[i] ? '<img class="ph" src="' + portraits[i] + '" alt="">' : '<img class="ph" alt="">') + '<div><img src="' + flagURL(t.flag) + '" alt="">' + t.name + '<small>' + stars(t.stars) + ' · ' + t.rating + '</small></div></div>'; };
-    vs.innerHTML = side(pick[0]) + '<div class="x">×</div>' + side(pick[1]);
+    const side = (i, c) => { const t = ROSTER[i]; return '<div class="team ' + c + '"><img src="' + duoFullURL(t) + '" alt=""><div class="tname"><img class="fl" src="' + flagURL(t.flag) + '" alt="">' + t.name + '<small>' + t.rating + '</small></div><div class="pn">' + t.p[0].name + ' · ' + t.p[1].name + '</div></div>'; };
+    vs.innerHTML = '<div class="mvs">' + side(pick[0], 'l') + '<div class="vsx">VS</div>' + side(pick[1], 'r') + '</div>';
   }
   function showStep(n){
     step = n; ['st1', 'st2', 'st3'].forEach((id, k) => $(id).classList.toggle('on', k === n - 1));
     $('scrPick').hidden = n === 3; $('scrSet').hidden = n !== 3;
     $('back').textContent = n === 1 ? 'Início' : 'Voltar';
-    if (n <= 2){ focus = pick[n - 1]; menuText.textContent = n === 1 ? 'Escolha a SUA dupla: um clique mostra os atributos, dois cliques confirmam.' : 'Agora a dupla da CPU: um clique mostra, dois cliques confirmam.'; renderGrid(); renderDetail(); }
+    if (n <= 2 && !unlocked(pick[n - 1])){ const f = ROSTER.findIndex((t, i) => unlocked(i)); if (f >= 0) pick[n - 1] = f; }
+    $('next').disabled = n <= 2 && !ROSTER.some((t, i) => unlocked(i));
+    if (n <= 2){ focus = pick[n - 1]; menuText.textContent = !ROSTER.some((t, i) => unlocked(i)) ? 'Vença seleções na carreira para liberá-las aqui.' : n === 1 ? 'Escolha a SUA dupla: um clique mostra os atributos, dois cliques confirmam.' : 'Agora a dupla adversária: um clique mostra, dois cliques confirmam.'; renderGrid(); renderDetail(); }
     else { menuText.textContent = 'Ajuste a partida e comece.'; renderVS(); }
   }
   $('next').addEventListener('click', () => showStep(step + 1));
@@ -3596,6 +3745,9 @@ if (typeof window !== 'undefined' && !window.__HEADLESS__){
   portraits = ROSTER.map(cardURL);
   showStep(1);
   /* ------------------------------ career/UI ------------------------------ */
+  let DEV = false; try { DEV = localStorage.getItem('reiDaPraia.dev') === '1'; } catch (e){}
+  const devBtn = $('devBtn'); const showDev = () => { devBtn.textContent = DEV ? 'Modo desenvolvedor: LIGADO' : 'Modo desenvolvedor'; devBtn.classList.toggle('on', DEV); };
+  devBtn.addEventListener('click', () => { DEV = !DEV; try { localStorage.setItem('reiDaPraia.dev', DEV ? '1' : '0'); } catch (e){} showDev(); }); showDev();
   const home = $('home'), car = $('career'), carP = $('careerPanel');
   let save = Career.load(), ctx = null;                       // ctx: partida da carreira em andamento
   const showOnly = el => { [home, menu, car].forEach(o => (o.hidden = o !== el)); };
@@ -3604,7 +3756,7 @@ if (typeof window !== 'undefined' && !window.__HEADLESS__){
   const strong = t => { const sum = {}; Object.keys(NAMES).forEach(k => (sum[k] = (t.p[0].at[k] + t.p[1].at[k]) / 2)); return Object.keys(sum).sort((a, b) => sum[b] - sum[a]).slice(0, 2).map(k => NAMES[k]).join(' e '); };
   const flagImg = t => t.flag ? '<img class="fl" src="' + flagURL(t.flag) + '" alt="">' : '<i class="chip" style="background:' + t.uni.base + '"></i>';
   $('goCareer').addEventListener('click', () => { showOnly(car); save ? renderMap() : renderCreate(true); });
-  $('goQuick').addEventListener('click', () => { showOnly(menu); menuTitle.textContent = 'Partida avulsa'; showStep(1); });
+  $('goQuick').addEventListener('click', () => { showOnly(menu); menuTitle.textContent = 'Amistoso'; showStep(1); });
 
   function renderCreate(first){
     const s = save || Career.fresh(), d = JSON.parse(JSON.stringify(s));
@@ -3640,15 +3792,16 @@ if (typeof window !== 'undefined' && !window.__HEADLESS__){
   function renderMap(){
     const s = save, cur = s.champion ? null : [s.stage, s.game];
     const myStage = Math.min(s.stage, 3), me = ownRoster(s, myStage, s.attrs);
-    carP.innerHTML = '<header class="mhead"><div><h1>Circuito Rei da Praia</h1><p>' + (s.champion ? 'Vocês são os REIS DA PRAIA! Jogue qualquer partida de novo.' : 'Próximo jogo destacado. <b>Modo teste:</b> qualquer jogo pode ser escolhido — sua dupla entra com o nível daquela etapa.') + '</p></div>' +
+    carP.innerHTML = '<header class="mhead"><div><h1>Circuito Rei da Praia</h1><p>' + (s.champion ? 'Vocês são os REIS DA PRAIA! Jogue qualquer partida de novo.' : (DEV ? 'Modo desenvolvedor: qualquer jogo pode ser escolhido.' : 'Vença os jogos para abrir o próximo. Jogos já vencidos podem ser jogados de novo.')) + '</p></div>' +
       '<div class="me">' + flagImg(me) + '<b>' + esc(me.name) + '</b><small>nota ' + me.rating + '</small></div></header>' +
       (s.evo ? '<div class="banner">Evolução disponível! <button class="btn" id="mEvo">Distribuir pontos</button></div>' : '') +
       '<div class="path">' + STAGES.map((st, si) => '<div class="stage' + (si < s.stage || s.champion ? ' done' : si === s.stage ? ' now' : '') + '"><h3>' + (si + 1) + '. ' + st.name + '</h3><p>' + st.aids + '</p>' +
         st.games.map((gname, gi) => { const opp = st.opp()[gi], done = s.champion || si < s.stage || (si === s.stage && gi < s.game), isCur = cur && cur[0] === si && cur[1] === gi;
-          return '<button class="node' + (done ? ' ok' : '') + (isCur ? ' cur' : '') + '" data-s="' + si + '" data-g="' + gi + '">' + '<span class="nm">' + (done ? '✓ ' : isCur ? '▶ ' : '') + gname + '</span>' + flagImg(opp) + '<span>' + esc(opp.name) + '</span><small>' + opp.rating + '</small></button>'; }).join('') + '</div>').join('') + '</div>' +
+          const locked = !DEV && !done && !isCur;
+          return '<button class="node' + (done ? ' ok' : '') + (isCur ? ' cur' : '') + (locked ? ' locked' : '') + '" data-s="' + si + '" data-g="' + gi + '"' + (locked ? ' aria-disabled="true"' : '') + '>' + '<span class="nm">' + (done ? '✓ ' : isCur ? '▶ ' : locked ? '🔒 ' : '') + gname + '</span>' + flagImg(opp) + '<span>' + esc(opp.name) + '</span><small>' + opp.rating + '</small></button>'; }).join('') + '</div>').join('') + '</div>' +
       '<div class="row"><span>Evolução</span><div class="seg" id="mAuto"><button data-v="0" aria-pressed="' + !s.autoEvo + '">Escolher</button><button data-v="1" aria-pressed="' + !!s.autoEvo + '">Automática</button></div></div>' +
       '<div class="actions"><button class="btn ghost" id="mHome">Início</button><button class="btn ghost" id="mEdit">Editar dupla</button><button class="btn ghost" id="mReset">Reiniciar carreira</button>' + (cur ? '<button class="btn" id="mNext">Próximo jogo</button>' : '') + '</div>';
-    carP.querySelectorAll('.node').forEach(b => b.addEventListener('click', () => renderPre(+b.dataset.s, +b.dataset.g)));
+    carP.querySelectorAll('.node').forEach(b => b.addEventListener('click', () => { if (!b.classList.contains('locked')) renderPre(+b.dataset.s, +b.dataset.g); }));
     $('mHome').addEventListener('click', () => showOnly(home));
     $('mEdit').addEventListener('click', () => renderCreate(false));
     $('mReset').addEventListener('click', () => { if (confirm('Apagar o progresso da carreira?')){ Career.reset(); save = null; renderCreate(true); } });
@@ -3660,21 +3813,22 @@ if (typeof window !== 'undefined' && !window.__HEADLESS__){
   let testFocus = 'auto';
   function renderPre(si, gi){
     const st = STAGES[si], real = !save.champion && si === save.stage && gi === save.game && !save.evo;
-    const attrs = real ? save.attrs : evolvedAttrs(si, testFocus), me = ownRoster(save, si, attrs), opp = st.opp()[gi];
+    const attrs = real || !DEV ? save.attrs : evolvedAttrs(si, testFocus), me = ownRoster(save, si, attrs), opp = st.opp()[gi];
     const fmt = st.setsToWin > 1 ? 'Melhor de 3 sets (21, 21, 15)' : '1 set de ' + st.targets[0];
-    carP.innerHTML = '<header class="mhead"><div><h1>' + (st.short === st.games[gi] ? 'Grande Final' : st.short + ' · ' + st.games[gi]) + '</h1><p>' + st.name + ' — ' + fmt + ' · ' + st.aids + (real ? '' : ' · <b>modo teste</b> (nível ' + STAGE_R[si] + ')') + '</p></div></header>' +
-      '<div class="vs"><div class="side"><img class="ph" src="' + cardURL(me) + '" alt=""><div>' + flagImg(me) + esc(me.name) + '<small>nota ' + me.rating + '</small></div></div><div class="x">×</div>' +
-      '<div class="side"><img class="ph" src="' + cardURL(opp) + '" alt=""><div>' + flagImg(opp) + esc(opp.name) + '<small>nota ' + opp.rating + '</small></div></div></div>' +
-      '<p class="scout">Pontos fortes de ' + esc(opp.name) + ': <b>' + strong(opp) + '</b>. ' + esc(opp.p[0].name) + ' e ' + esc(opp.p[1].name) + '.</p>' +
-      (!real && si > 0 ? '<div class="row"><span>Evolução até aqui</span><div class="seg" id="tFocus">' + Object.keys(EVO).map(k => '<button data-v="' + k + '" aria-pressed="' + (k === testFocus) + '">' + EVO_NAMES[k] + '</button>').join('') + '</div></div>' : '') +
-      '<div class="actions"><button class="btn ghost" id="pBack">Mapa</button><button class="btn" id="pGo">Jogar</button></div>';
+    const chips = [st.setsToWin > 1 ? 'melhor de 3 sets' : 'jogo até ' + st.targets[0], st.aids.split(' · ')[0]].concat(real || !DEV ? [] : ['modo dev']);
+    carP.innerHTML = '<div class="match"><div class="mtop"><span>' + st.name + '</span><b>' + (st.short === st.games[gi] ? 'GRANDE FINAL' : st.games[gi]) + '</b><em>' + chips.join(' · ') + '</em></div>' +
+      '<div class="mvs"><div class="team l"><img src="' + duoFullURL(me) + '" alt=""><div class="tname">' + flagImg(me) + esc(me.name) + '<small>' + me.rating + '</small></div><div class="pn">' + esc(me.p[0].name) + ' · ' + esc(me.p[1].name) + '</div></div>' +
+      '<div class="vsx">VS</div><div class="team r"><img src="' + duoFullURL(opp) + '" alt=""><div class="tname">' + flagImg(opp) + esc(opp.name) + '<small>' + opp.rating + '</small></div><div class="pn">' + esc(opp.p[0].name) + ' · ' + esc(opp.p[1].name) + '</div></div></div>' +
+      '<p class="scout">Ponto forte deles: <b>' + strong(opp) + '</b></p>' +
+      (DEV && !real && si > 0 ? '<div class="row"><span>Evolução até aqui</span><div class="seg" id="tFocus">' + Object.keys(EVO).map(k => '<button data-v="' + k + '" aria-pressed="' + (k === testFocus) + '">' + EVO_NAMES[k] + '</button>').join('') + '</div></div>' : '') +
+      '<div class="actions"><button class="btn ghost" id="pBack">Mapa</button><button class="btn" id="pGo">Jogar</button></div></div>';
     $('pBack').addEventListener('click', renderMap);
     if ($('tFocus')) $('tFocus').querySelectorAll('button').forEach(b => b.addEventListener('click', () => { testFocus = b.dataset.v; renderPre(si, gi); }));
     $('pGo').addEventListener('click', () => {
       ctx = { si, gi, real, me, opp };
       Sound.init(); if (Sound.ctx && Sound.ctx.state === 'suspended') Sound.ctx.resume();
       car.hidden = true; running = true;
-      game.startCustom(me, opp, { targets: st.targets, setsToWin: st.setsToWin, bar: st.bar, barLevel: st.barLevel, aim: st.aim, lockR: st.lockR, env: st.env });
+      game.startCustom(me, opp, { targets: st.targets, setsToWin: st.setsToWin, aiFactor: st.aiFactor, bar: st.bar, barLevel: st.barLevel, aim: st.aim, lockR: st.lockR, env: st.env });
     });
   }
 
@@ -3682,6 +3836,7 @@ if (typeof window !== 'undefined' && !window.__HEADLESS__){
     const st = STAGES[ctx.si], m = game.match, won = w === 0, S = game.stats || [{}, {}];
     const sets = m.setsToWin > 1 ? m.setLog.map(x => x[0] + '–' + x[1]).join(' · ') : m.score[0] + ' × ' + m.score[1];
     let next = '';
+    if (ctx.real && won){ save.beaten = save.beaten || []; if (!save.beaten.includes(ctx.opp.name)) save.beaten.push(ctx.opp.name); if (ctx.si === 3 && !save.beaten.includes('Brasil')) save.beaten.push('Brasil'); }
     if (ctx.real){ const T = save.tot = save.tot || { jogos: 0, vit: 0, perf: 0, toco: 0, ace: 0 }; T.jogos++; if (won) T.vit++; T.perf += S[0].perf || 0; T.toco += S[0].toco || 0; T.ace += S[0].ace || 0; Career.save(save); }
     if (ctx.real && won){
       save.perf = (save.perf || 0) + (S[0].perf || 0);
@@ -3709,7 +3864,7 @@ if (typeof window !== 'undefined' && !window.__HEADLESS__){
   // evolução por etapa: só três escolhas
   function renderEvo(){
     const opts = Object.keys(EVO).map(k => { const after = evolve(save.attrs, k);
-      return '<button class="evc" data-f="' + k + '"><b>' + EVO_NAMES[k] + '</b><span>' + (k === 'auto' ? 'cada atleta melhora no que já faz bem' : k === 'ataque' ? 'cortada, saque e bloqueio sobem mais' : 'manchete, levantamento e velocidade sobem mais') + '</span>' +
+      return '<button class="evc" data-f="' + k + '"><b>' + EVO_NAMES[k] + '</b><span>' + ({ auto: 'cada atleta melhora no que já faz bem', equilibrada: 'tudo sobe por igual', ataque: 'ataque sobe mais, defesa sobe um pouco', defesa: 'defesa sobe mais, ataque sobe um pouco' })[k] + '</span>' +
         save.p.map((c, i) => '<em>' + esc(c.name) + ': ' + Object.keys(NAMES).map(n => NAMES[n].slice(0, 3) + ' ' + after[i][n]).join(' · ') + '</em>').join('') + '</button>'; }).join('');
     carP.innerHTML = '<header class="mhead"><div><h1>Evolução da dupla</h1><p>Escolha como a dupla evolui para o próximo torneio.</p></div></header><div class="evos">' + opts + '</div>' +
       '<div class="actions"><button class="btn ghost" id="eMap">Depois</button></div>';
@@ -3721,20 +3876,54 @@ if (typeof window !== 'undefined' && !window.__HEADLESS__){
     carP.innerHTML = '<div class="champ"><div class="conf"></div><h1>REIS DA PRAIA</h1><img src="' + cardURL(me) + '" alt=""><p>' + esc(me.name) + ' — ' + esc(save.p[0].name) + ' e ' + esc(save.p[1].name) + ' venceram o circuito e a Grande Final!</p><div class="actions"><button class="btn" id="chMap">Mapa do circuito</button></div></div>';
     $('chMap').addEventListener('click', renderMap);
   }
-  // encerramento do jogo: CONGRATULATIONS, números da carreira e créditos divertidos
-  function showEnding(){
-    const me = ownRoster(save, 3, ctx.real ? save.attrs : evolvedAttrs(3, testFocus)), T = save.tot || { jogos: 0, vit: 0, perf: 0, toco: 0, ace: 0 }, n1 = esc(save.p[0].name), n2 = esc(save.p[1].name);
-    const credits = [['Campeões', n1 + ' & ' + n2], ['Técnico', 'você'], ['Levantamentos perfeitos', n1], ['Pancadas no fundo', n2], ['Torcida', '40 mil pessoas que nunca pararam de pular'], ['Árbitro', 'o único que não comemorou'], ['Bola', 'amarela, como manda a tradição'], ['Agradecimentos', 'ao sol, à areia e ao Tião Gigante, que vai pedir revanche']];
-    const e = $('ending');
-    e.innerHTML = '<div class="endbox"><div class="congr">' + 'CONGRATULATIONS!'.split('').map((ch, i) => '<span style="animation-delay:' + (i * 0.06) + 's">' + ch + '</span>').join('') + '</div>' +
-      '<p class="endsub">' + esc(me.name) + ' — os novos <b>REIS DA PRAIA</b></p>' +
-      '<div class="endrow"><img src="' + cardURL(me) + '" alt="' + n1 + ' e ' + n2 + '"><div class="endstats">' +
-      [['Jogos', T.jogos], ['Vitórias', T.vit], ['Jogadas perfeitas', T.perf], ['Tocos', T.toco], ['Aces', T.ace], ['Troféus', '4 de 4']].map(([k, v]) => '<div><b>' + v + '</b><span>' + k + '</span></div>').join('') + '</div></div>' +
-      '<div class="credits"><div class="roll">' + credits.map(([k, v]) => '<p><small>' + k + '</small>' + v + '</p>').join('') + '<p class="fin">FIM?<small>A areia sempre espera uma revanche.</small></p></div></div>' +
-      '<div class="actions"><button class="btn" id="endGo">Voltar ao circuito</button></div></div>';
-    e.hidden = false; Sound.crowd(1.6);
-    $('endGo').onclick = () => { e.hidden = true; game.endCeremony(); running = false; showOnly(car); renderMap(); };
+  // encerramento: pôr do sol, os campeões surfando, fogos, CONGRATULATIONS e música surf
+  function surfScene(cv, duo){
+    const ctx2 = cv.getContext('2d'), img = new Image(); img.src = duo; const t0 = performance.now(), fw = [];
+    const gulls = [0, 1, 2].map(i => ({ x: Math.random(), y: 0.12 + i * 0.07, s: 0.03 + Math.random() * 0.02 }));
+    const frame = now => {
+      if ($('ending').hidden) return;
+      const dpr = Math.min(2, devicePixelRatio || 1), W = cv.clientWidth * dpr, H = cv.clientHeight * dpr; if (cv.width !== W || cv.height !== H){ cv.width = W; cv.height = H; }
+      const t = (now - t0) / 1000, x = ctx2;
+      const sky = x.createLinearGradient(0, 0, 0, H * 0.62); sky.addColorStop(0, '#2a1b5e'); sky.addColorStop(0.55, '#d1477a'); sky.addColorStop(1, '#ffb35c'); x.fillStyle = sky; x.fillRect(0, 0, W, H);
+      const sx = W * 0.72, sy = H * 0.6, sr = H * 0.2; x.save(); x.beginPath(); x.arc(sx, sy, sr, 0, 6.283); x.clip();               // sol retrô listrado
+      const sg = x.createLinearGradient(0, sy - sr, 0, sy + sr); sg.addColorStop(0, '#fff3a0'); sg.addColorStop(1, '#ff6a3d'); x.fillStyle = sg; x.fillRect(sx - sr, sy - sr, sr * 2, sr * 2);
+      x.fillStyle = '#d1477a'; for (let i = 0; i < 6; i++){ const yy = sy + sr * (0.1 + i * 0.16), hh = sr * (0.02 + i * 0.018); x.fillRect(sx - sr, yy, sr * 2, hh); } x.restore();
+      gulls.forEach(gl => { gl.x = (gl.x + gl.s * 0.01) % 1.1; const gx = gl.x * W, gy = gl.y * H + Math.sin(t * 2 + gl.y * 9) * 6, f = Math.sin(t * 8 + gl.y * 20) * 6 * dpr; x.strokeStyle = '#2a1b3e'; x.lineWidth = 2 * dpr; x.beginPath(); x.moveTo(gx - 12 * dpr, gy + f); x.quadraticCurveTo(gx - 5 * dpr, gy - 6 * dpr, gx, gy); x.quadraticCurveTo(gx + 5 * dpr, gy - 6 * dpr, gx + 12 * dpr, gy + f); x.stroke(); });
+      if (Math.random() < 0.05){ const n = 50, cx = W * (0.1 + Math.random() * 0.8), cy = H * (0.08 + Math.random() * 0.3), col = ['#ffd23f', '#38e05a', '#59c9ff', '#ff7aa8', '#ffffff'][(Math.random() * 5) | 0]; for (let i = 0; i < n; i++){ const an = i / n * 6.283, sp = (1.5 + Math.random()) * dpr; fw.push({ x: cx, y: cy, vx: Math.cos(an) * sp, vy: Math.sin(an) * sp, life: 1, col }); } }
+      for (let i = fw.length - 1; i >= 0; i--){ const p = fw[i]; p.x += p.vx; p.y += p.vy; p.vy += 0.03 * dpr; p.life -= 0.012; if (p.life <= 0){ fw.splice(i, 1); continue; } x.globalAlpha = p.life; x.fillStyle = p.col; x.fillRect(p.x, p.y, 3 * dpr, 3 * dpr); } x.globalAlpha = 1;
+      const wave = (k, amp, base, col, sp) => { const ys = X => H * base + Math.sin(X / W * 6.283 * k + t * sp) * amp * H + Math.sin(X / W * 6.283 * k * 2.3 - t * sp * 0.7) * amp * 0.4 * H; x.fillStyle = col; x.beginPath(); x.moveTo(0, H); for (let X = 0; X <= W; X += 8) x.lineTo(X, ys(X)); x.lineTo(W, H); x.fill(); return ys; };
+      wave(1.2, 0.012, 0.64, '#5a3c8c', 0.6); const ys = wave(1.6, 0.03, 0.72, '#2f6fbf', 1.2);
+      const bx = W * (0.3 + 0.1 * Math.sin(t * 0.45)), by = ys(bx), slope = (ys(bx + 10) - ys(bx - 10)) / 20, bh = H * 0.4;   // prancha na crista
+      x.save(); x.translate(bx, by - H * 0.012); x.rotate(Math.atan(slope) * 0.8);
+      if (img.complete && img.naturalWidth){ const iw = bh * img.naturalWidth / img.naturalHeight; x.drawImage(img, -iw / 2, -bh - H * 0.005, iw, bh); }
+      const bg = x.createLinearGradient(-H * 0.2, 0, H * 0.2, 0); bg.addColorStop(0, '#ffe14a'); bg.addColorStop(0.5, '#ff6a3d'); bg.addColorStop(1, '#ffe14a');
+      x.fillStyle = bg; x.beginPath(); x.ellipse(0, 0, H * 0.22, H * 0.022, 0, 0, 6.283); x.fill(); x.strokeStyle = '#1f5fd8'; x.lineWidth = 3 * dpr; x.beginPath(); x.moveTo(-H * 0.2, 0); x.lineTo(H * 0.2, 0); x.stroke(); x.restore();
+      wave(2.1, 0.018, 0.84, '#1d4f9a', 1.8); x.fillStyle = 'rgba(255,255,255,.35)'; for (let i = 0; i < 18; i++){ const fx2 = ((i * 97 + t * 60 * dpr) % W), fy = H * (0.84 + (i % 3) * 0.04); x.fillRect(fx2, fy, 14 * dpr, 2 * dpr); }
+      requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
   }
+  function showEnding(){
+    const me = ownRoster(save, 3, ctx.real || !DEV ? save.attrs : evolvedAttrs(3, testFocus)), T = save.tot || { jogos: 0, vit: 0, perf: 0, toco: 0, ace: 0 }, n1 = esc(save.p[0].name), n2 = esc(save.p[1].name);
+    const credits = [['Campeões', n1 + ' & ' + n2], ['Técnico', 'você'], ['Levantamentos perfeitos', n1], ['Pancadas no fundo', n2], ['Torcida', '40 mil pessoas que nunca pararam de pular'], ['Árbitro', 'o único que não comemorou'], ['Bola', 'amarela, como manda a tradição'], ['Trilha sonora', 'surf music de pôr do sol'], ['Agradecimentos', 'ao sol, à areia e ao Tião Gigante, que já pediu revanche']];
+    const e = $('ending');
+    e.innerHTML = '<canvas id="surfCv"></canvas><div class="endbox"><div class="congr">' + 'CONGRATULATIONS!'.split('').map((ch, i) => '<span style="animation-delay:' + (i * 0.06) + 's,' + (i * 0.12) + 's">' + ch + '</span>').join('') + '</div>' +
+      '<p class="endsub">' + esc(me.name) + ' — os novos <b>REIS DA PRAIA</b> 🏆</p>' +
+      '<div class="endstats">' + [['Jogos', T.jogos], ['Vitórias', T.vit], ['Perfeitas', T.perf], ['Tocos', T.toco], ['Aces', T.ace], ['Troféus', '4/4']].map(([k, v]) => '<div><b>' + v + '</b><span>' + k + '</span></div>').join('') + '</div>' +
+      '<div class="credits"><div class="roll">' + credits.map(([k, v]) => '<p><small>' + k + '</small>' + v + '</p>').join('') + '<p class="theend">THE END</p><p class="fin">…ou será que não?<small>A areia sempre espera uma revanche.</small></p></div></div>' +
+      '<div class="actions"><button class="btn" id="endGo">Voltar ao circuito</button></div></div>';
+    e.hidden = false; Sound.crowd(1.6); SurfMusic.start(); surfScene($('surfCv'), duoFullURL(me));
+    $('endGo').onclick = () => { SurfMusic.stop(); e.hidden = true; game.endCeremony(); running = false; showOnly(car); renderMap(); };
+  }
+  // pausa e menu durante a partida
+  const pauseBtn = $('pauseBtn'), pauseOv = $('pause');
+  const openPause = () => { if (!running || game.ceremony) return; window.__dbg.pause = true; pauseOv.hidden = false; };
+  const closePause = () => { pauseOv.hidden = true; window.__dbg.pause = false; };
+  pauseBtn.addEventListener('click', openPause);
+  $('pzGo').addEventListener('click', closePause);
+  $('pzAgain').addEventListener('click', () => { closePause(); game.startCustom(...game.lastStart); });
+  $('pzExit').addEventListener('click', () => { closePause(); running = false; game.match.state = 'MENU'; if (ctx){ showOnly(car); renderMap(); } else { menuTitle.textContent = 'Amistoso'; showOnly(menu); showStep(3); } });
+  setInterval(() => { pauseBtn.hidden = !running || !!game.ceremony; }, 250);
   game.onGameOverCb = w => {
     running = false;
     if (ctx){
@@ -3760,15 +3949,15 @@ if (typeof window !== 'undefined' && !window.__HEADLESS__){
   game.input.onKey = k => {
     if (k === 'p' || k === 'P') game.debug = !game.debug;
     if (k === 'm' || k === 'M') Sound.on = !Sound.on;
-    if ((k === 'y' || k === 'Y') && running) game.devWin();
-    if (k === 'Escape' && running){ running = false; game.match.state = 'MENU'; if (ctx){ showOnly(car); renderPre(ctx.si, ctx.gi); } else { menuTitle.textContent = 'Pausado'; showOnly(menu); showStep(3); } }
+    if ((k === 'y' || k === 'Y') && running && DEV) game.devWin();
+    if (k === 'Escape' && running){ if (pauseOv.hidden) openPause(); else closePause(); }
   };
   $('go').addEventListener('click', () => { ctx = null; });
   showOnly(home);
 
   // ---------- celular ----------
   const fsBtn = $('fsBtn'), canFS = !!(document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen);
-  const showTouch = () => { touch.hidden = false; renderer.touchUI = true; renderer.uiK = 1.35; if (canFS) fsBtn.hidden = false; };
+  const showTouch = () => { document.body.classList.add('touch'); touch.hidden = false; renderer.touchUI = true; renderer.uiK = 1.35; if (canFS) fsBtn.hidden = false; };
   if (matchMedia('(pointer: coarse)').matches) showTouch();
   addEventListener('touchstart', showTouch, { once: true, passive: true });
   game.input.bindTouch(touch);
@@ -3779,7 +3968,7 @@ if (typeof window !== 'undefined' && !window.__HEADLESS__){
   });
   let secret = [];
   addEventListener('touchstart', e => {
-    if (e.touches.length < 3 || !running) return;
+    if (e.touches.length < 3 || !running || !(localStorage.getItem('reiDaPraia.dev') === '1')) return;
     const now = performance.now(); secret = secret.filter(t => now - t < 2000); secret.push(now);
     if (secret.length >= 3){ secret = []; game.match.say('CÓDIGO SECRETO!', 1.2); game.devWin(); }
   }, { passive: true });
