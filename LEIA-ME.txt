@@ -1,0 +1,18 @@
+Rei da Praia — pacote para publicar na Vercel
+
+Arquivos:
+  index.html            o jogo (versão celular, que também roda no computador)
+  three.min.js          biblioteca 3D (three.js r128, licença MIT em three-LICENSE.txt)
+  manifest.webmanifest  permite "Adicionar à tela inicial" e abrir em tela cheia
+  sw.js                 guarda o jogo no aparelho para abrir rápido / sem internet
+  icon-192.png, icon-512.png  ícones do app
+  vercel.json           configuração de cache
+
+Publicar (sem programar):
+  1. No GitHub, crie um repositório novo (ex.: rei-da-praia) e use "Add file > Upload files"
+     para enviar TODOS os arquivos desta pasta (não a pasta, o conteúdo dela).
+  2. Na Vercel: Add New > Project > Import o repositório > Deploy (Framework: Other, sem build).
+  3. Pronto: a Vercel dá um endereço https://rei-da-praia.vercel.app (ou parecido).
+  Para atualizar o jogo depois: envie o novo index.html para o mesmo repositório; a Vercel publica sozinha.
+
+Alternativa pelo terminal: npm i -g vercel  →  dentro desta pasta: vercel  →  vercel --prod
