@@ -222,6 +222,17 @@ html, body{ overscroll-behavior:none; -webkit-text-size-adjust:100%; }
 #ending .actions{ justify-content:center; }
 @media (prefers-reduced-motion: reduce){ .congr span, .roll{ animation:none; } }
 @media (max-width:700px), (max-height:480px){ .endrow{ grid-template-columns:1fr 1fr; gap:10px; } .endstats b{ font-size:22px; } .credits{ height:90px; } }
+
+#tapZone{ position:absolute; right:0; top:14%; bottom:0; width:45%; pointer-events:auto; touch-action:none; overflow:hidden; }
+#joyZone{ width:55% !important; }
+.ripple{ position:absolute; width:20px; height:20px; margin:-10px 0 0 -10px; border-radius:50%; border:3px solid rgba(255,255,255,.85); animation:rip .45s ease-out forwards; pointer-events:none; }
+@keyframes rip{ to{ transform:scale(4); opacity:0; } }
+#serveBtns{ position:absolute; right:calc(16px + env(safe-area-inset-right,0px)); bottom:calc(16px + env(safe-area-inset-bottom,0px)); display:flex; flex-direction:column; gap:8px; pointer-events:auto; }
+#serveBtns[hidden]{ display:none; }
+#serveBtns button{ font-family:"Barlow Condensed",sans-serif; font-style:italic; font-weight:800; font-size:18px; text-transform:uppercase; padding:10px 18px; border:0; border-radius:999px; color:#14182a; background:#fff; box-shadow:0 6px 16px rgba(0,0,0,.3); touch-action:none; }
+#serveBtns button[data-b="C"]{ background:#ff6a4d; color:#fff; } #serveBtns button[data-b="B"]{ background:#5fd06b; } #serveBtns button[data-b="A"]{ background:#ffd23f; }
+#tapHint{ position:absolute; right:calc(18px + env(safe-area-inset-right,0px)); bottom:calc(14px + env(safe-area-inset-bottom,0px)); font-family:"Barlow Condensed",sans-serif; font-style:italic; font-weight:800; font-size:16px; color:#fff; background:rgba(10,14,28,.55); padding:4px 12px; border-radius:999px; pointer-events:none; text-transform:uppercase; }
+#tapHint[hidden]{ display:none; }
 </style>
 <script src="three.min.js"></script>
 </head>
@@ -231,7 +242,9 @@ html, body{ overscroll-behavior:none; -webkit-text-size-adjust:100%; }
 
   <div id="touch" hidden>
     <div id="joyZone"><div id="joy"><div id="knob"></div></div></div>
-    <div id="btns"><button class="tbtn big" id="tbX" aria-label="Ação"><i>MANCHETE</i></button></div>
+    <div id="tapZone"></div>
+    <div id="serveBtns" hidden><button data-b="A">Por baixo</button><button data-b="B">Por cima</button><button data-b="C">Viagem</button></div>
+    <div id="tapHint" hidden></div>
   </div>
   <button id="fsBtn" class="fsb" hidden aria-label="Tela cheia">⛶</button>
   <div id="ending" class="overlay" hidden></div>
@@ -526,9 +539,9 @@ AMATEURS.forEach(t => { t.p.forEach(p => (p.shorts = t.uni)); t.rating = Math.ro
 const REIS = Object.assign({}, ROSTER[0], { name: 'Reis da Praia' });
 // circuito: 3 torneios de 3 jogos + a grande final (melhor de 3). As ajudas diminuem conforme avança.
 const STAGES = [
-  { env: 'amador', name: 'Torneio Amador da Praia', short: 'Amador', games: ['Quartas', 'Semifinal', 'Final'], opp: () => AMATEURS, targets: [15], setsToWin: 1, bar: true, aim: true, lockR: 1.5, aids: 'barra de timing · mira na areia · trava ampla' },
-  { env: 'regional', name: 'Circuito Regional', short: 'Regional', games: ['Quartas', 'Semifinal', 'Final'], opp: () => [ROSTER[7], ROSTER[6], ROSTER[5]], targets: [15], setsToWin: 1, bar: true, aim: true, lockR: 1.15, aids: 'barra de timing · mira na areia' },
-  { env: 'pro', name: 'Circuito Profissional', short: 'Profissional', games: ['Quartas', 'Semifinal', 'Final'], opp: () => [ROSTER[4], ROSTER[2], ROSTER[1]], targets: [21], setsToWin: 1, bar: false, aim: false, lockR: 1.15, brazil: true, aids: 'sem barra · no feeling' },
+  { env: 'amador', name: 'Torneio Amador da Praia', short: 'Amador', games: ['Quartas', 'Semifinal', 'Final'], opp: () => AMATEURS, targets: [15], setsToWin: 1, bar: true, barLevel: 3, aim: true, lockR: 1.5, aids: 'barra de timing completa · mira na areia · trava ampla' },
+  { env: 'regional', name: 'Circuito Regional', short: 'Regional', games: ['Quartas', 'Semifinal', 'Final'], opp: () => [ROSTER[7], ROSTER[6], ROSTER[5]], targets: [15], setsToWin: 1, bar: true, barLevel: 2, aim: true, lockR: 1.15, aids: 'barra curta · mira na areia' },
+  { env: 'pro', name: 'Circuito Profissional', short: 'Profissional', games: ['Quartas', 'Semifinal', 'Final'], opp: () => [ROSTER[4], ROSTER[2], ROSTER[1]], targets: [21], setsToWin: 1, bar: true, barLevel: 1, aim: false, lockR: 1.15, brazil: true, aids: 'só um piscar no tempo certo' },
   { env: 'final', name: 'Grande Final', short: 'Final', games: ['Final'], opp: () => [REIS], targets: [21, 21, 15], setsToWin: 2, bar: false, aim: false, lockR: 0.85, brazil: true, aids: 'sem barra · trava menor · melhor de 3 sets' },
 ];
 const STAGE_R = [58, 67, 77, 86];                       // nível de referência da sua dupla em cada etapa (modo teste)
@@ -1172,6 +1185,9 @@ class TeamAI {
             const r = Math.random(), d = this.team.ai;
             g.press(m.server, r < d.serveC ? 'C' : r < d.serveC + 0.45 ? 'B' : 'A');
           }
+        } else if (sq && sq.btn === 'B' && sq.tossed && !sq.hitNow){
+          if (this.servePressAt === null) this.servePressAt = sq.ideal + TimingSystem.sampleDelta({ p: 0.1, g: 0.28 }, skillOf(m.server, 'saq'));
+          if (g.time >= this.servePressAt){ this.servePressAt = null; g.press(m.server, 'B'); }
         } else if (sq && sq.btn === 'C' && sq.tossed && !sq.go){
           if (this.servePressAt === null) this.servePressAt = g.serveApexT + TimingSystem.sampleDelta(CFG.WIN.serve, skillOf(m.server, 'saq'));
           if (g.time >= this.servePressAt) g.press(m.server, 'C');
@@ -1396,7 +1412,7 @@ class Game {
   start(aIdx, bIdx, pts, demo){ this.startCustom(ROSTER[aIdx], ROSTER[bIdx], { targets: [pts], setsToWin: 1, demo, bar: this.barMode !== 'off', aim: true, lockR: 1.15 }); }
   startCustom(rA, rB, cfg){
     const demo = !!cfg.demo, pts = cfg.targets[0];
-    this.barMode = cfg.bar ? 'on' : 'off'; this.aimOn = cfg.aim !== false; CFG.LOCK_R = cfg.lockR || 1.15; this.env = cfg.env || 'pro'; this.ceremony = null;
+    this.barMode = cfg.bar ? 'on' : 'off'; this.barLevel = cfg.barLevel != null ? cfg.barLevel : (cfg.bar ? 3 : 0); this.aimOn = cfg.aim !== false; CFG.LOCK_R = cfg.lockR || 1.15; this.env = cfg.env || 'pro'; this.ceremony = null;
     for (const t of this.teams) for (const p of t.players) p.standZ = null;
     setRoster(this.teams[0], rA); setRoster(this.teams[1], rB);
     this.teams[0].isHuman = !demo; this.ais.forEach(a => a.reset());
@@ -1424,7 +1440,7 @@ class Game {
   // botão único do celular: qual lance ele dispara agora e com que nome
   oneButton(){
     const c = this.touchContext(), m = this.match, sq = this.serveSeq;
-    if (m.state === 'SERVE') return sq ? { btn: 'C', label: 'BATER' } : { btn: 'C', label: 'SACAR' };
+    if (m.state === 'SERVE') return sq ? { btn: sq.btn, label: 'BATER' } : { btn: null, label: 'SACAR' };
     const btn = c.best || 'A'; return { btn, label: c.L[btn] };
   }
   // rótulos e destaque dos três botões de toque conforme o lance
@@ -1452,7 +1468,7 @@ class Game {
   }
   onNetTouch(){ const b = this.ball; this.fx.push({ x: b.p.x, y: b.p.y, z: 2.7, text: 'REDE', color: '#fff', t: 0 }); }
   addPrint(x, y, w = 1){ this.prints.push({ x, y, t: this.time, w }); if (this.prints.length > 260) this.prints.shift(); }
-  showBar(){ return this.barMode !== 'off'; }
+  showBar(){ return this.barMode !== 'off' && this.barLevel > 0; }
   notePress(pl){ if (pl.team.isHuman && pl.isControlled && this.currentCue) this.lastPress = { id: this.currentCue.id, t: this.time }; }
   // ponto onde o jogador deve ficar: atrás do ponto de contato, de frente para a bola, com as mãos na bola
   standPoint(cp){
@@ -1506,6 +1522,10 @@ class Game {
       const sq = this.serveSeq;
       if (!sq && b.state === BallState.Idle) this.serve(pl, btn);
       else if (sq && sq.btn === 'C' && sq.tossed && btn === 'C' && !sq.go) this.jumpServeHit(pl);
+      else if (sq && sq.btn === 'B' && sq.tossed && btn === 'B' && !sq.hitNow){                  // flutuante: 2º toque bate na bola
+        const sa = att(pl, 'saq'), d = this.time - sq.ideal; sq.grade = TimingSystem.classify(d, { p: 0.1 * (0.8 + 0.4 * sa), g: 0.28 * (0.85 + 0.3 * sa) }); sq.hitNow = true;
+        this.lastTiming = { delta: d, grade: sq.grade, type: 'saque flutuante', who: pl.team.id };
+      }
       return;
     }
     if (m.state !== 'RALLY' || b.state === BallState.Grounded) return;
@@ -1813,16 +1833,19 @@ class Game {
       }
     } else if (sq.btn === 'B'){
       if (!pl.airborne){ pl.vx = t < 0.5 ? -side * 0.7 : 0; pl.vy = 0; }
-      if (!sq.tossed && t >= 0.17){ sq.tossed = true; b.state = BallState.Toss; b.v = { x: -side * 0.7, y: 0, z: 5.4 }; b.trajId++; b.isServe = true; }
-      if (sq.tossed){
-        const tc = b.timeToHeight(CFG.CONTACT.float);
-        if (tc !== null && tc <= 0 && b.state === BallState.Toss){
+      if (!sq.tossed && t >= 0.17){ sq.tossed = true; b.state = BallState.Toss; b.v = { x: -side * 0.7, y: 0, z: 5.4 }; b.trajId++; b.isServe = true; sq.ideal = this.time + b.timeToHeight(CFG.CONTACT.float); }
+      if (sq.tossed && sq.hitNow && !sq.hit){
+        sq.hit = true; const grade = sq.grade;
+        if (grade === Grade.MISS){ this.addFx(pl, 'ERROU O SAQUE', GRADE_COL.MISS, 3.0); return; }
+        {
           pl.swingT = this.time; let target, T;
-          if (Math.random() < 0.03 + 0.17 * (1 - att(pl, 'saq'))){
+          if (Math.random() < (grade === Grade.PERFECT ? 0.02 : 0.12) + 0.15 * (1 - att(pl, 'saq'))){
             if (Math.random() < 0.5){ target = { x: opp * 0.8, y: pl.y, z: 0 }; T = 0.9; }
             else { target = { x: opp * rand(9.4, 10.8), y: rand(1, 7), z: 0 }; T = bm.solveT(target, 1.15, 0.2); }
           } else { target = ai ? aiAim() : (humanAim() || { x: opp * rand(4.5, 7.4), y: rand(0.8, 7.2), z: 0 }); T = bm.solveT(target, 1.15, 0.2); }
-          this.launchServe(pl, target, T); this.impact(false);
+          if (b.state === BallState.Toss) b.p = { x: b.p.x, y: b.p.y, z: Math.max(b.p.z, 1.9) };
+          this.launchServe(pl, target, T); this.impact(grade === Grade.PERFECT); this.addFx(pl, grade === Grade.PERFECT ? 'SAQUE PERFEITO' : 'SAQUE ' + grade, GRADE_COL[grade], 3.0);
+          if (grade === Grade.PERFECT) this.addFire(pl.team, 0.1);
         }
       }
     } else {
@@ -2491,6 +2514,7 @@ class Renderer {
     const g = this.g, m = g.match, b = g.ball, h = g.teams[0], a = g.human.active, now = g.time;
     if (!h.isHuman || !a) return null;
     const sq = g.serveSeq;
+    if (m.state === 'SERVE' && sq && sq.btn === 'B' && sq.tossed && sq.pl.team === h && !sq.hitNow) return { id: 'flt' + b.trajId, label: 'S · SAQUE', ideal: sq.ideal, win: { p: 0.1, g: 0.28 } };
     if (m.state === 'SERVE' && sq && sq.btn === 'C' && sq.tossed && sq.pl.team === h && !sq.go) return { id: 'srv' + b.trajId, label: 'A · SAQUE', ideal: g.serveApexT, win: CFG.WIN.serve };
     if (m.state !== 'RALLY' || b.state !== BallState.InAir) return null;
     if (a.airborne || a.spikePlan) return null;
@@ -2512,8 +2536,13 @@ class Renderer {
   }
   drawBar(cue){
     const ctx = this.ctx, g = this.g, now = g.time, S = CFG.BAR_SPAN;
-    const rel = now - cue.ideal, lp = g.lastPress && g.lastPress.id === cue.id ? g.lastPress : null;
-    if (rel < -1.0 || (rel > 0.45 && !lp) || (lp && now - lp.t > 0.6)) return;
+    const rel = now - cue.ideal, lp = g.lastPress && g.lastPress.id === cue.id ? g.lastPress : null, lvl = g.barLevel || 3;
+    if (lvl === 1){                                          // profissional: só um piscar discreto no instante perfeito
+      if (Math.abs(rel) < cue.win.p * 1.2 && !lp){ ctx.globalAlpha = 0.85; ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(VIEW.W / 2, 556, 7, 0, 6.283); ctx.fill(); ctx.globalAlpha = 1; }
+      return;
+    }
+    if (rel < (lvl === 2 ? -0.42 : -1.0) || (rel > 0.45 && !lp) || (lp && now - lp.t > 0.6)) return;
+    if (lvl === 2) ctx.globalAlpha = 0.72;                   // regional: barra curta e mais apagada
     ctx.font = 'italic 800 16px ' + HUD_FONT; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
     const lw = ctx.measureText(this.touchUI ? cue.label.replace(/^[A-Z] · /, '') : cue.label).width, W = 300, H = 12, tot = lw + 24 + W, X0 = VIEW.W / 2 - tot / 2 - 14, X = X0 + 14 + lw + 24, Y = 548;
     const px = t => X + W / 2 + clamp(t / S, -1, 1) * W / 2;
@@ -2534,6 +2563,7 @@ class Renderer {
       ctx.fillStyle = GRADE_COL[gr]; ctx.beginPath(); ctx.moveTo(cx - 7, Y - 9); ctx.lineTo(cx + 7, Y - 9); ctx.lineTo(cx, Y + 1); ctx.closePath(); ctx.fill();
       ctx.font = '800 12px ' + HUD_FONT; ctx.textAlign = 'center'; ctx.fillText(gr, cx, Y + H + 9);
     } else { ctx.fillStyle = '#ffffff'; ctx.shadowColor = '#fff'; ctx.shadowBlur = 8; this.rr(cx - 2.5, Y - 5, 5, H + 10, 2.5); ctx.fill(); ctx.shadowBlur = 0; }
+    ctx.globalAlpha = 1;
   }
   drawHUD(){
     const ctx = this.ctx, g = this.g, m = g.match;
@@ -2573,6 +2603,7 @@ class Renderer {
     if (human.isHuman && m.state === 'SERVE' && m.server && m.server.team === human){
       if (!sq && g.ball.state === BallState.Idle) hint = 'Saque: D por baixo · S flutuante · A viagem  —  a seta segurada ao apertar escolhe o lado';
       else if (sq && sq.btn === 'C' && !sq.go) hint = 'A quando a bola chegar ao ponto mais alto (segure a seta para direcionar)';
+      else if (sq && sq.btn === 'B' && !sq.hitNow) hint = 'Aperte S de novo para bater na bola';
     } else if (human.isHuman && m.state === 'RALLY' && g.human.active){
       const a = g.human.active, opp = g.teams[1], oppT = m.possession === opp.id ? m.touches : 0, myT = m.possession === human.id ? m.touches : 0;
       if (a.airborne && a.jumpKind === 'spike') hint = 'Na batida segure: ↑/↓ lado · frente fundo · trás largadinha · S = shot por cima';
@@ -3422,9 +3453,12 @@ class Renderer3D {
     this.pGeo.attributes.position.needsUpdate = true;
     this.drawPrints();
     const shk = g.shake > 0 ? (Math.random() - 0.5) * 0.08 * (g.shake / 0.18) : 0;
-    const want = g.ceremony ? 0 : clamp((b.state === BallState.Grounded ? 0 : b.p.x) * 0.3, -2.4, 2.4);   // acompanha a bola de leve (sacadores sempre à vista)
-    this.pan += (want - this.pan) * 0.04;
-    this.cam.position.set(this.camX + this.pan + shk, this.camBase.y + shk * 0.5, this.camBase.z); this.cam.lookAt(this.camX + this.pan, 0.2, -6);
+    const mob = this.touchUI && VIEW.W / VIEW.H >= 1.85;
+    const srv = m.state === 'SERVE' && m.server ? m.server.x : 0;
+    const want = g.ceremony ? 0 : mob ? clamp(srv * 0.24, -2.4, 2.4) : clamp((b.state === BallState.Grounded ? 0 : b.p.x) * 0.3, -2.4, 2.4);   // celular: só desliza um pouco no saque
+    this.pan += (want - this.pan) * (mob ? 0.06 : 0.04);
+    if (mob){ if (this.cam.fov !== 45.5){ this.cam.fov = 45.5; this.cam.updateProjectionMatrix(); } this.cam.position.set(this.pan + shk, 10.21 + shk * 0.5, 2.34); this.cam.lookAt(this.pan, 0.68, -4); }
+    else { if (this.cam.fov !== 46.7){ this.cam.fov = 46.7; this.cam.updateProjectionMatrix(); } this.cam.position.set(this.camX + this.pan + shk, this.camBase.y + shk * 0.5, this.camBase.z); this.cam.lookAt(this.camX + this.pan, 0.2, -6); }
     this.r.render(this.scene, this.cer ? this.cerCam : this.cam);
     // camada 2D: textos, estouros de impacto e interface
     const ctx = this.ctx; ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, this.c.width, this.c.height);
@@ -3597,7 +3631,7 @@ if (typeof window !== 'undefined' && !window.__HEADLESS__){
       ctx = { si, gi, real, me, opp };
       Sound.init(); if (Sound.ctx && Sound.ctx.state === 'suspended') Sound.ctx.resume();
       car.hidden = true; running = true;
-      game.startCustom(me, opp, { targets: st.targets, setsToWin: st.setsToWin, bar: st.bar, aim: st.aim, lockR: st.lockR, env: st.env });
+      game.startCustom(me, opp, { targets: st.targets, setsToWin: st.setsToWin, bar: st.bar, barLevel: st.barLevel, aim: st.aim, lockR: st.lockR, env: st.env });
     });
   }
 
@@ -3707,13 +3741,22 @@ if (typeof window !== 'undefined' && !window.__HEADLESS__){
   const applyGfx = () => { if (renderer.setQuality) renderer.setQuality(gfx === 'auto' ? autoQ() : gfx); document.querySelectorAll('#segGfx button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === gfx))); };
   document.querySelectorAll('#segGfx button').forEach(b => b.addEventListener('click', () => { gfx = b.dataset.v; try { localStorage.setItem(GFX_KEY, gfx); } catch (e){} applyGfx(); }));
   applyGfx();
-  const tbX = $('tbX'); let tFrame = 0, oneBtn = { btn: 'A', label: 'MANCHETE' };
-  tbX.addEventListener('pointerdown', e => { e.preventDefault(); oneBtn = game.oneButton(); game.input.presses.push(oneBtn.btn); tbX.classList.add('hit'); setTimeout(() => tbX.classList.remove('hit'), 120); });
+  const tapZone = $('tapZone'), tapHint = $('tapHint'), serveBtns = $('serveBtns'); let tFrame = 0;
+  const ripple = (x, y) => { const r = document.createElement('i'); r.className = 'ripple'; r.style.left = x + 'px'; r.style.top = y + 'px'; tapZone.appendChild(r); setTimeout(() => r.remove(), 450); };
+  tapZone.addEventListener('pointerdown', e => {                     // tocou na tela: o jogo decide o lance
+    e.preventDefault(); if (!serveBtns.hidden) return;
+    const o = game.oneButton(); if (o.btn) game.input.presses.push(o.btn);
+    const r = tapZone.getBoundingClientRect(); ripple(e.clientX - r.left, e.clientY - r.top);
+  });
+  serveBtns.querySelectorAll('button').forEach(b => b.addEventListener('pointerdown', e => { e.preventDefault(); game.input.presses.push(b.dataset.b); }));
   const updateTouch = () => {
     if (touch.hidden || ++tFrame % 5) return;
-    oneBtn = game.oneButton(); if (tbX.dataset.l !== oneBtn.label){ tbX.dataset.l = oneBtn.label; tbX.firstChild.textContent = oneBtn.label; }
-    tbX.classList.toggle('best', !!game.touchContext().best || game.match.state === 'SERVE');
+    const m = game.match, h = game.teams[0], mySrv = m.state === 'SERVE' && m.server && m.server.team === h && h.isHuman && !game.serveSeq && game.ball.state === BallState.Idle;
+    if (serveBtns.hidden !== !mySrv) serveBtns.hidden = !mySrv;
+    const o = game.oneButton(), show = (m.state === 'RALLY' && !!game.touchContext().best) || (m.state === 'SERVE' && game.serveSeq && game.serveSeq.pl.team === h);
+    const lab = show ? 'toque: ' + o.label : ''; if (tapHint.dataset.l !== lab){ tapHint.dataset.l = lab; tapHint.textContent = lab; tapHint.hidden = !lab; }
   };
+
 
   let last = performance.now(), acc = 0; const DT = 1 / 120;
   const dbg = window.__dbg = { game, renderer, pause: false, step(n){ for (let i = 0; i < n; i++) game.step(DT); renderer.draw(); } };   // gancho para testes automatizados
@@ -3721,7 +3764,7 @@ if (typeof window !== 'undefined' && !window.__HEADLESS__){
     if (dbg.pause){ last = now; requestAnimationFrame(loop); return; }
     const frame = Math.min(0.05, (now - last) / 1000); last = now;
     if (running && game.match.state !== 'MENU'){
-      const ts = (game.slowmo > 0 ? 0.35 : 1) * (renderer.touchUI ? 0.85 : 1); if (game.slowmo > 0) game.slowmo -= frame;   // câmera lenta nos lances especiais; celular 15% mais lento
+      const ts = (game.slowmo > 0 ? 0.35 : 1) * (renderer.touchUI ? 0.93 : 1); if (game.slowmo > 0) game.slowmo -= frame;   // câmera lenta nos lances especiais; celular 15% mais lento
       acc += frame * ts; while (acc >= DT){ game.step(DT); acc -= DT; } }
     else game.input.consume();
     updateTouch();
